@@ -5,14 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Countdown timer</title>
     
-    <script type="module" crossorigin src="/hw-js-09/assets/modulepreload-polyfill-ec808ebb.js"></script>
-    <link rel="stylesheet" href="/hw-js-09/assets/common-24e32714.css">
+    <script type="module" crossorigin src="/hw-js-09/commonHelpers2.js"></script>
+    <link rel="modulepreload" crossorigin href="/hw-js-09/assets/modulepreload-polyfill-ec808ebb.js">
+    <link rel="modulepreload" crossorigin href="/hw-js-09/assets/vendor-64899521.js">
+    <link rel="stylesheet" href="/hw-js-09/assets/vendor-6af07092.css">
+    <link rel="stylesheet" href="/hw-js-09/assets/common-ab68a64e.css">
   </head>
   <body>
     <p><a href="index.html">Go back</a></p>
 
     <input type="text" id="datetime-picker" />
-    <button type="button" data-start>Start</button>
+    <button type="button" data-start disabled>Start</button>
 
     <div class="timer">
       <div class="field">
@@ -34,5 +37,6 @@
     </div>
 
     
+    <!-- <script src="https://cdn.jsdelivr.net/npm/notiflix@3.2.6"></script> -->
   </body>
 </html>
