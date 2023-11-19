@@ -1,7 +1,7 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
-import Notiflix from 'notiflix';
+// import Notiflix from 'notiflix';
 import 'notiflix/dist/notiflix-3.2.6.min.css'
 
 const btnStart = document.querySelector('button[data-start]');
@@ -20,6 +20,7 @@ const options = {
         if (options.defaultDate >= selectedDates[0]) {
             Notiflix.Notify.failure('Please choose a date in the future');
         } else {
+            Notiflix.Notify.success('You can press "Start"');
             btnStart.disabled = false;
         }
     },
