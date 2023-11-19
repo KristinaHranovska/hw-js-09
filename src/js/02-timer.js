@@ -1,9 +1,15 @@
 import flatpickr from "flatpickr";
 import "flatpickr/dist/flatpickr.min.css";
 
+import Notiflix from 'notiflix';
+import 'notiflix/dist/notiflix-3.2.6.min.css'
+
 const btnStart = document.querySelector('button[data-start]');
 const input = document.querySelector('#datetime-picker');
-let newObjectDate = {}; // створення пустого об'єкта для отримання вибранної дати
+const day = document.querySelector('span[data-days]');
+const hour = document.querySelector('span[data-hours]');
+const minute = document.querySelector('span[data-minutes]');
+const second = document.querySelector('span[data-seconds]');
 
 const options = {
     enableTime: true,
@@ -11,24 +17,16 @@ const options = {
     defaultDate: new Date(),
     minuteIncrement: 1,
     onClose(selectedDates) {
-        const chooseDate = selectedDates[0].getTime();
-        const todayDay = options.defaultDate.getTime();
-
-        if (todayDay > chooseDate) {
-            alert('Please choose a date in the future');
+        if (options.defaultDate >= selectedDates[0]) {
+            Notiflix.Notify.failure('Please choose a date in the future');
         } else {
             btnStart.disabled = false;
         }
-
-        const valueForConvert = chooseDate - todayDay; // різниця в мілісекундах
-
-        newObjectDate = convertMs(valueForConvert);
-
-        console.log(newObjectDate);
     },
 };
 
 flatpickr('#datetime-picker', options);
+btnStart.addEventListener('click', startTimer);
 
 function convertMs(ms) {
     // Number of milliseconds per unit of time
@@ -49,12 +47,6 @@ function convertMs(ms) {
     return { days, hours, minutes, seconds };
 }
 
-btnStart.addEventListener('click', startTimer);
-
-const days = document.querySelector('span[data-days]');
-const hours = document.querySelector('span[data-hours]');
-const minutes = document.querySelector('span[data-minutes]');
-const seconds = document.querySelector('span[data-seconds]');
 
 /**
  * 
@@ -67,30 +59,22 @@ function startTimer() {
     btnStart.disabled = true;
     input.disabled = true;
 
-    // targetDate - представляє майбутню дату та час
-    const targetDate = new Date();
-    targetDate.setDate(targetDate.getDate() + newObjectDate.days);
-    targetDate.setHours(targetDate.getHours() + newObjectDate.hours);
-    targetDate.setMinutes(targetDate.getMinutes() + newObjectDate.minutes);
-    targetDate.setSeconds(targetDate.getSeconds() + newObjectDate.seconds);
-
     const timer = setInterval(() => {
         const currentDate = new Date();
+        const targetDate = new Date(input.value);
         const timeDiff = targetDate - currentDate;
 
-        const day = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
-        const hour = Math.floor((timeDiff / (1000 * 60 * 60)) % 24);
-        const minute = Math.floor((timeDiff / 1000 / 60) % 60);
-        const second = Math.floor((timeDiff / 1000) % 60);
+        const { days, hours, minutes, seconds } = convertMs(timeDiff);
 
-        days.textContent = addLeadingZero(day);
-        hours.textContent = addLeadingZero(hour);
-        minutes.textContent = addLeadingZero(minute);
-        seconds.textContent = addLeadingZero(second);
+        day.textContent = addLeadingZero(days);
+        hour.textContent = addLeadingZero(hours);
+        minute.textContent = addLeadingZero(minutes);
+        second.textContent = addLeadingZero(seconds);
 
-        if (day === 0 && hour === 0 && minute === 0 && second === 0) {
+        if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
             clearInterval(timer);
-            return;
+            btnStart.disabled = false;
+            input.disabled = false;
         }
     }, 1000);
 }
