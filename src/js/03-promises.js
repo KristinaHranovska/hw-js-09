@@ -30,14 +30,15 @@ function onSubmitBtnClick(event) {
   form.reset();
 }
 
-function createPromise(_, delay) {
+function createPromise(position, delay) {
+  const value = { position, delay };
   return new Promise((res, rej) => {
     setTimeout(() => {
       const shouldResolve = Math.random() > 0.3;
       if (shouldResolve) {
-        res('Fulfilled promise')
+        res(value)
       } else {
-        rej('Rejected promise');
+        rej(value);
       }
     }, delay);
   })
